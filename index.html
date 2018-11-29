@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<script type="text/javascript" src="d3.js"></script>
+	<script src="main.js"></script>
+	//<link rel="stylesheet" href="styles.css">
+	<style>
+		body {
+			font: 12px sans-serif;
+		}
+
+		.tick>line {
+			fill: none;
+			stroke: black;
+		}
+
+		.tick>text {
+			fill: black;
+		}
+
+		.selected {
+			stroke: red;
+			fill: red;
+		}
+
+		.selected2 {
+			stroke: orange;
+			fill: orange;
+		}
+
+		path.domain {
+			fill: none;
+			stroke-width: 2px;
+			stroke: black;
+		}
+
+		#wrapper {
+			clear: both;
+		}
+
+		#chart1 {
+			float: left;
+		}
+
+		#chart2 {
+			float: left;
+		}
+
+		#chart3 {
+			float: left;
+			margin-top: 30px;
+			margin-left: 20px;
+		}
+
+		.brush .extent {
+			fill-opacity: .1;
+			stroke: #fff;
+			shape-rendering: crispEdges;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="chart1">
+		</div>
+		<div id="chart2">
+			<strong>IMDd Score:</strong> <span id="IMDd"></span><br />
+			<strong>Budget: $</strong> <span id="budget"></span><br />
+			<strong>Gross:  $</strong> <span id="gross"></span><br />
+			<strong>Genre:</strong> <span id="genre"></span><br />
+		</div>
+		<div id="chart3">
+			
+		</div>
+	</div>
+	<script>
+
+	</script>
+</body>
+
+</html>
