@@ -3,9 +3,9 @@
 
 <head>
 	<meta charset="UTF-8" />
+	<title>P5</title>
 	<script type="text/javascript" src="d3.js"></script>
 	<script src="main.js"></script>
-	//<link rel="stylesheet" href="styles.css">
 	<style>
 		body {
 			font: 12px sans-serif;
@@ -20,14 +20,14 @@
 			fill: black;
 		}
 
-		.selected {
-			stroke: red;
-			fill: red;
+		.moreGross {
+			stroke: black;
+			fill: lightgreen;
 		}
 
-		.selected2 {
-			stroke: orange;
-			fill: orange;
+		.moreBudget {
+			stroke: black;
+			fill: red;
 		}
 
 		path.domain {
@@ -44,14 +44,10 @@
 			float: left;
 		}
 
-		#chart2 {
+		#details {
 			float: left;
-		}
-
-		#chart3 {
-			float: left;
-			margin-top: 30px;
-			margin-left: 20px;
+			fill-opacity: .1;
+			stroke: pink;
 		}
 
 		.brush .extent {
@@ -59,22 +55,29 @@
 			stroke: #fff;
 			shape-rendering: crispEdges;
 		}
+
+		
+		
 	</style>
 
 </head>
 
 <body>
+	<h1>2010</h1>
+	<select id="d3-dropdown"> 
+		<option value="red">Red</option>
+		<option value="green">Green</option>
+		<option value="black">Balck</option>
+  </select>
 	<div id="wrapper">
-		<div id="chart1">
-		</div>
-		<div id="chart2">
+		<div id="chart1"></div>
+		<div id="details">
+			<strong>Title:</strong> <span id="title"></span><br />
+			<strong>Director:</strong> <span id="director"></span><br />
 			<strong>IMDd Score:</strong> <span id="IMDd"></span><br />
-			<strong>Budget: $</strong> <span id="budget"></span><br />
-			<strong>Gross:  $</strong> <span id="gross"></span><br />
+			<strong>Budget:</strong> <span id="budget"></span><br />
+			<strong>Gross: </strong> <span id="gross"></span><br />
 			<strong>Genre:</strong> <span id="genre"></span><br />
-		</div>
-		<div id="chart3">
-			
 		</div>
 	</div>
 	<script>
