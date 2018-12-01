@@ -12,15 +12,20 @@ window.onload = start;
 // the screen) has finished loading.
 function start() {
    
-    var width = 1500;
-    var height = 650;
+    var width = 1300;
+    var height = 600;
 
     var div = d3.select("body").append("div")	
         .attr("class", "tooltip")				
         .style("opacity", 0);
 
     // Initial graph -> default year = 2010
-    d3.csv("movies.csv", function (csv) {
+    d3.csv("movies.csv", function(d) {
+        d.budget = +d.budget; 
+        d.gross = +d.gross;
+        return d;
+  
+    }, function (csv) {
         for (var i = 0; i < csv.length; ++i) {
             csv[i].gross  = Number(csv[i].gross);
             csv[i].budget  = Number(csv[i].budget);
@@ -36,8 +41,8 @@ function start() {
             return row.budget;
         });
             
-        var xScale = d3.scale.linear().domain([0, 10]).range([80, 750]);
-        var yScale = d3.scale.linear().domain([0,263700000]).range([600, 30]); //[0,263700000]
+        var xScale = d3.scale.linear().domain([0, 10]).range([80, 600]);
+        var yScale = d3.scale.linear().domain([0,263700000]).range([500, 30]); //[0,263700000]
         var rScale = d3.scale.linear().domain(grossExtent).range([3, 60]);
 
 
@@ -50,13 +55,7 @@ function start() {
             .append("svg:svg")
             .attr("width", width)
             .attr("height", height);
-        
-            // var tooltip = d3.select("details")
-            // .append("div")
-            // .style("position", "absolute")
-            // .style("z-index", "10")
-            // .style("visibility", "hidden")
-            // .text("a simple tooltip");
+
 
         // Dots
         var temp1 = chart1.selectAll("circle")
@@ -80,20 +79,7 @@ function start() {
             .attr("r", function(d) {
                 return rScale(d.gross);
             })
-            // .on("mouseover", function(d) {
-            //     return tooltip.style("visibility", "visible").text('radius = ' + d);
-            //   })
-            // .on("mouseout", function() {
-            //     return tooltip.style("visibility", "hidden");
-            //  })
-        //     .on("mouseover", function(d)
-        //     {
-        //         d3.select(d.budget).style("visibility","visible")
-        //     })
-        //    .on("mouseout", function(d)
-        //     {
-        //         d3.select(d.budget).style("visibility","hidden")
-        //     })
+            
             .on("mouseover", function(d) {		
                  div.transition()		
                     .duration(200)		
@@ -130,11 +116,11 @@ function start() {
         // x-axis
         chart1 // or something else that selects the SVG element in your visualizations
             .append("g") // create a group node
-            .attr("transform", "translate(0,600)")
+            .attr("transform", "translate(0,500)")
             .call(xAxis) // call the axis generator
             .append("text")
             .attr("class", "label")
-            .attr("x", 740)
+            .attr("x", 600)
             .attr("y", -6)
             .style("text-anchor", "end")
             .text("IMDb score");
@@ -152,16 +138,24 @@ function start() {
             .attr("dy", ".71em")
             .style("text-anchor", "end")
             .text("Budget");
+
+
+            csvFilter = csv.sort(function(x, y) {return d3.descending(x.gross, y.gross);});
+            csvF1 = csvFilter.filter(function (d) {return d.title_year == 2010});
+            csvF = csvF1.filter(function (d) {return d.gross > csvF1[10].gross});
+            var svg = chart1
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+    
+            var bars = svg.append('g');
+            xScale1 = d3.scale.linear().range([0, width/2.7]);
+                yScale1 = d3.scale.ordinal().rangeRoundBands([0, height/1.25], 0.3);
+                d3BarChart(csvF, bars, 1700000, xScale1, yScale1);
      
     });
 
-    // d3.select(graph)
-    //     .append('p')
-    //     .append('button')
-    //     .text('Filter Data')
-    //     .on('click', function () {
 
-    //     })
 
     // Dropdown for years
     d3.select("select")
@@ -172,7 +166,12 @@ function start() {
             d3.selectAll(".dot").remove();
             d3.select("svg").remove();
 
-            d3.csv("movies.csv", function (csv) {
+            d3.csv("movies.csv", function(d) {
+                d.budget = +d.budget; 
+                d.gross = +d.gross;
+                return d;
+          
+            }, function (csv) {
                 for (var i = 0; i < csv.length; ++i) {
                     csv[i].gross  = Number(csv[i].gross);
                     csv[i].budget  = Number(csv[i].budget);
@@ -185,8 +184,8 @@ function start() {
                 var budgetExtent = d3.extent(csv, function (row) { return row.budget; });
 
                     
-                var xScale = d3.scale.linear().domain([0, 10]).range([80, 750]);
-                var yScale = d3.scale.linear().domain([0,263700000]).range([600, 30]); //[0,263700000]
+                var xScale = d3.scale.linear().domain([0, 10]).range([80, 600]);
+                var yScale = d3.scale.linear().domain([0,263700000]).range([500, 30]); //[0,263700000]
                 var rScale = d3.scale.linear().domain(grossExtent).range([3, 60]);
 
 
@@ -258,11 +257,11 @@ function start() {
                 // x-axis
                 chart1 // or something else that selects the SVG element in your visualizations
                     .append("g") // create a group node
-                    .attr("transform", "translate(0,600)")
+                    .attr("transform", "translate(0,500)")
                     .call(xAxis) // call the axis generator
                     .append("text")
                     .attr("class", "label")
-                    .attr("x", width - 16)
+                    .attr("x", 600)
                     .attr("y", -6)
                     .style("text-anchor", "end")
                     .text("IMDb score");
@@ -279,10 +278,89 @@ function start() {
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Budget");
+
+
+                    csvFilter = csv.sort(function(x, y) {return d3.descending(x.gross, y.gross);});
+                    csvF1 = csvFilter.filter(function (d) {return d.title_year == selected});
+                    csvF = csvF1.filter(function (d) {return d.gross > csvF1[10].gross});
+                    var svg = chart1
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+            
+                    var bars = svg.append('g');
+                    xScale1 = d3.scale.linear().range([0, width/2.7]);
+                        yScale1 = d3.scale.ordinal().rangeRoundBands([0, height/1.25], 0.3);
+                        d3BarChart(csvF, bars, 1700000, xScale1, yScale1);
+    
              
             });
     })
 
 
+
+}
+function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
+    
+    xScale.domain([0, d3.max(dataset, function(d) {
+        return d.gross })
+    ]);
+
+    yScale.domain(dataset.map(function(d) {
+        return d.movie_title;
+    }));
+
+
+    var yAxis = d3.svg.axis().scale(yScale).orient('left');
+
+    var xAxis = d3.svg.axis().scale(xScale).orient('top');
+
+
+
+
+    bars.append('g')
+        .attr('class', 'y axis')
+        .attr('id','y axis')
+        .attr('transform', 'translate(770, 30)')
+        .call(yAxis);
+
+
+    if (topNumber == 0) {
+        bars.selectAll('text').remove();
+    }
+
+    ticks = bars.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(770, 30)')
+        .call(xAxis)
+        .selectAll(".tick text");
+    ticks.attr("class", function(d,i){
+            if(i%3 != 0) d3.select(this).remove();
+    });;
+
+    bars.append('g')
+        .selectAll('.bar')
+        .data(dataset)
+        .enter()
+        // .on("mouseover", handleMouseOver)
+        .append('rect')
+        .attr("fill", "blue")
+        .attr('class', 'bar')
+        .attr('transform', 'translate(670,30)')
+        .attr('x', 100)
+        .attr('y', function(d) {
+            return yScale(d.movie_title);
+        })
+        .attr('width', function(d) {
+            return xScale(d.gross);
+        })
+        .attr('height', function(d) {
+            return yScale1.rangeBand();
+        });
+
+
+// bars.on("mouseover", function(d){
+//     ba
+// })
 
 }
