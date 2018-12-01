@@ -13,7 +13,7 @@ window.onload = start;
 function start() {
    
     var width = 1300;
-    var height = 600;
+    var height = 550;
 
     var div = d3.select("body").append("div")	
         .attr("class", "tooltip")				
@@ -140,18 +140,18 @@ function start() {
             .text("Budget");
 
 
-            csvFilter = csv.sort(function(x, y) {return d3.descending(x.gross, y.gross);});
-            csvF1 = csvFilter.filter(function (d) {return d.title_year == 2010});
-            csvF = csvF1.filter(function (d) {return d.gross > csvF1[10].gross});
-            var svg = chart1
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height);
+        csvFilter = csv.sort(function(x, y) {return d3.descending(x.gross, y.gross);});
+        csvF1 = csvFilter.filter(function (d) {return d.title_year == 2010});
+        csvF = csvF1.filter(function (d) {return d.gross > csvF1[10].gross});
+        var svg = chart1
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
     
-            var bars = svg.append('g');
-            xScale1 = d3.scale.linear().range([0, width/2.7]);
-                yScale1 = d3.scale.ordinal().rangeRoundBands([0, height/1.25], 0.3);
-                d3BarChart(csvF, bars, 1700000, xScale1, yScale1);
+        var bars = svg.append('g');
+        xScale1 = d3.scale.linear().range([0, width/2.7]);
+        yScale1 = d3.scale.ordinal().rangeRoundBands([0, height/1.25], 0.3);
+        d3BarChart(csvF, bars, 1700000, xScale1, yScale1);
      
     });
 
@@ -302,9 +302,7 @@ function start() {
 }
 function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
     
-    xScale.domain([0, d3.max(dataset, function(d) {
-        return d.gross })
-    ]);
+    xScale.domain([0, 650000000    ]); //d3.max(dataset, function(d) {  return d.gross })
 
     yScale.domain(dataset.map(function(d) {
         return d.movie_title;
@@ -312,11 +310,7 @@ function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
 
 
     var yAxis = d3.svg.axis().scale(yScale).orient('left');
-
     var xAxis = d3.svg.axis().scale(xScale).orient('top');
-
-
-
 
     bars.append('g')
         .attr('class', 'y axis')
@@ -339,15 +333,15 @@ function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
 
     bars.append("text")
     .attr("class", "label")
-    .attr("x", 1250)
-    .attr("y", 20)
+    .attr("x", 1280)
+    .attr("y", 10)
     .style("text-anchor", "end")
     .text("Gross");
 
     bars.append("text")
     .attr("class", "label")
     .attr("x", 750)
-    .attr("y", 20)
+    .attr("y", 40)
     .style("text-anchor", "end")
     .text("Movie Title");
     });;
