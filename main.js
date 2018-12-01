@@ -12,8 +12,12 @@ window.onload = start;
 // the screen) has finished loading.
 function start() {
    
-    var width = 900;
-    var height = 500;
+    var width = 750;
+    var height = 650;
+
+    var div = d3.select("body").append("div")	
+        .attr("class", "tooltip")				
+        .style("opacity", 0);
 
     // Initial graph -> default year = 2010
     d3.csv("movies.csv", function (csv) {
@@ -32,8 +36,8 @@ function start() {
             return row.budget;
         });
             
-        var xScale = d3.scale.linear().domain([0, 10]).range([80, 870]);
-        var yScale = d3.scale.linear().domain([0,263700000]).range([470, 30]); //[0,263700000]
+        var xScale = d3.scale.linear().domain([0, 10]).range([80, 750]);
+        var yScale = d3.scale.linear().domain([0,263700000]).range([600, 30]); //[0,263700000]
         var rScale = d3.scale.linear().domain(grossExtent).range([3, 60]);
 
 
@@ -46,6 +50,13 @@ function start() {
             .append("svg:svg")
             .attr("width", width)
             .attr("height", height);
+        
+            // var tooltip = d3.select("details")
+            // .append("div")
+            // .style("position", "absolute")
+            // .style("z-index", "10")
+            // .style("visibility", "hidden")
+            // .text("a simple tooltip");
 
         // Dots
         var temp1 = chart1.selectAll("circle")
@@ -69,6 +80,38 @@ function start() {
             .attr("r", function(d) {
                 return rScale(d.gross);
             })
+            // .on("mouseover", function(d) {
+            //     return tooltip.style("visibility", "visible").text('radius = ' + d);
+            //   })
+            // .on("mouseout", function() {
+            //     return tooltip.style("visibility", "hidden");
+            //  })
+        //     .on("mouseover", function(d)
+        //     {
+        //         d3.select(d.budget).style("visibility","visible")
+        //     })
+        //    .on("mouseout", function(d)
+        //     {
+        //         d3.select(d.budget).style("visibility","hidden")
+        //     })
+            .on("mouseover", function(d) {		
+                 div.transition()		
+                    .duration(200)		
+                    .style("opacity", .9);		
+                div.html("Title:" + d.movie_title+ "<br/>"  
+                    + "Director: " + d.director_name+ "<br/>" 
+                    + "IMDb Score: " + d.imdb_score+ "<br/>" 
+                    + "Budget: $" + d.budget+ "<br/>" 
+                    + "Gross:  $" + d.gross+ "<br/>" 
+                    + "Genres: " + d.genres+ "<br/>" 
+                )	
+                    .style("left", (d3.event.pageX) + "px")		
+                    .style("top", (d3.event.pageY - 28) + "px");	
+                })					
+            .on("mouseout", function(d) {		
+                div.transition()		
+                    .duration(500)		
+                    .style("opacity", 0)	})
             .on("click", function (d, i) {
                 document.getElementById("title").textContent = d.movie_title;
                 document.getElementById("director").textContent = d.director_name;
@@ -79,11 +122,15 @@ function start() {
             
             });
 
-    
+            chart1.selectAll('.dot')
+                .filter(function (d) {
+                    return d.gross >= d.budget; })
+                .attr("class", "moreGross");
+                
         // x-axis
         chart1 // or something else that selects the SVG element in your visualizations
             .append("g") // create a group node
-            .attr("transform", "translate(0," + (height - 30) + ")")
+            .attr("transform", "translate(0,600)")
             .call(xAxis) // call the axis generator
             .append("text")
             .attr("class", "label")
@@ -107,7 +154,13 @@ function start() {
      
     });
 
+    // d3.select(graph)
+    //     .append('p')
+    //     .append('button')
+    //     .text('Filter Data')
+    //     .on('click', function () {
 
+    //     })
 
     // Dropdown for years
     d3.select("select")
@@ -130,8 +183,9 @@ function start() {
                 var grossExtent = d3.extent(csv, function (row) { return row.gross; });
                 var budgetExtent = d3.extent(csv, function (row) { return row.budget; });
 
-                var xScale = d3.scale.linear().domain([0, 10]).range([80, 870]);
-                var yScale = d3.scale.linear().domain([0,263700000]).range([470, 30]); //[0,263700000]
+                    
+                var xScale = d3.scale.linear().domain([0, 10]).range([80, 750]);
+                var yScale = d3.scale.linear().domain([0,263700000]).range([600, 30]); //[0,263700000]
                 var rScale = d3.scale.linear().domain(grossExtent).range([3, 60]);
 
 
@@ -150,6 +204,7 @@ function start() {
                     .data(csv)
                     .enter()
                     .append("circle")
+                    .attr("class",'dot')
                     .attr("id", function (d, i) {
                         return i;
                     })
@@ -166,6 +221,24 @@ function start() {
                     .attr("r", function(d) {
                         return rScale(d.gross);
                     })
+                    .on("mouseover", function(d) {		
+                        div.transition()		
+                           .duration(200)		
+                           .style("opacity", .9);		
+                       div.html("Title:" + d.movie_title+ "<br/>"  
+                           + "Director: " + d.director_name+ "<br/>" 
+                           + "IMDb Score: " + d.imdb_score+ "<br/>" 
+                           + "Budget: $" + d.budget+ "<br/>" 
+                           + "Gross:  $" + d.gross+ "<br/>" 
+                           + "Genres: " + d.genres+ "<br/>" 
+                       )	
+                           .style("left", (d3.event.pageX) + "px")		
+                           .style("top", (d3.event.pageY - 28) + "px");	
+                       })					
+                   .on("mouseout", function(d) {		
+                       div.transition()		
+                           .duration(500)		
+                           .style("opacity", 0)	})
                     .on("click", function (d, i) {
                         document.getElementById("title").textContent = d.movie_title;
                         document.getElementById("director").textContent = d.director_name;
@@ -174,12 +247,17 @@ function start() {
                         document.getElementById("gross").textContent =  "$ "+d.gross;
                         document.getElementById("genre").textContent = d.genres;
                     });
-        
+
+                
+                chart1.selectAll('.dot')
+                .filter(function (d) {
+                        return d.gross >= d.budget; })
+                .attr("class", "moreGross");
             
                 // x-axis
                 chart1 // or something else that selects the SVG element in your visualizations
                     .append("g") // create a group node
-                    .attr("transform", "translate(0," + (height - 30) + ")")
+                    .attr("transform", "translate(0,600)")
                     .call(xAxis) // call the axis generator
                     .append("text")
                     .attr("class", "label")
@@ -205,12 +283,5 @@ function start() {
     })
 
 
-    d3.select("select")
-        .append('p')
-        .append('button')
-        .text('Filter Data')
-        .on('click', function () {
-            
-        });
 
 }

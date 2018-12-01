@@ -22,7 +22,7 @@
 
 		.moreGross {
 			stroke: black;
-			fill: lightgreen;
+			fill: rgb(63, 241, 63);
 		}
 
 		.moreBudget {
@@ -55,9 +55,18 @@
 			stroke: #fff;
 			shape-rendering: crispEdges;
 		}
-
-		
-		
+		div.tooltip {	
+    		position: absolute;			
+    		text-align: left;			
+    		width: 200px;					
+    		height: 100px;					
+    		padding: 8px;				
+   	 		font: 12px sans-serif;		
+    		background: rgb(101, 205, 231);	
+    		border: 0px;		
+    		border-radius: 8px;			
+    		pointer-events: none;			
+		}
 	</style>
 
 </head>
@@ -73,22 +82,13 @@
 			<option value="2015">2015</option>
 			<option value="2016">2016</option>
 	</select>
-	<div id = graph></div>
+	<div id = graph>
+		Green represents that the gross of the movie is bigger and equal than the budget.
+		Red represents that the gross of the movie is smaller than the budget
+	</div>
 		
-
-	  
-	
-	
 	<div id="wrapper">
 		<div id="chart1"></div>
-		<div id="details">
-			<strong>Title:</strong> <span id="title"></span><br />
-			<strong>Director:</strong> <span id="director"></span><br />
-			<strong>IMDd Score:</strong> <span id="IMDd"></span><br />
-			<strong>Budget:</strong> <span id="budget"></span><br />
-			<strong>Gross: </strong> <span id="gross"></span><br />
-			<strong>Genre:</strong> <span id="genre"></span><br />
-		</div>
 	</div>
 	<script>
 
