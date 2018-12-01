@@ -12,7 +12,7 @@ window.onload = start;
 // the screen) has finished loading.
 function start() {
    
-    var width = 750;
+    var width = 1500;
     var height = 650;
 
     var div = d3.select("body").append("div")	
@@ -134,7 +134,7 @@ function start() {
             .call(xAxis) // call the axis generator
             .append("text")
             .attr("class", "label")
-            .attr("x", width - 16)
+            .attr("x", 740)
             .attr("y", -6)
             .style("text-anchor", "end")
             .text("IMDb score");
@@ -147,6 +147,7 @@ function start() {
             .append("text")
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
+            .attr("x", -30)
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
