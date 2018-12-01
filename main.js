@@ -336,6 +336,20 @@ function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
         .selectAll(".tick text");
     ticks.attr("class", function(d,i){
             if(i%3 != 0) d3.select(this).remove();
+
+    bars.append("text")
+    .attr("class", "label")
+    .attr("x", 1250)
+    .attr("y", 20)
+    .style("text-anchor", "end")
+    .text("Gross");
+
+    bars.append("text")
+    .attr("class", "label")
+    .attr("x", 750)
+    .attr("y", 20)
+    .style("text-anchor", "end")
+    .text("Movie Title");
     });;
 
     bars.append('g')
@@ -344,7 +358,7 @@ function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
         .enter()
         // .on("mouseover", handleMouseOver)
         .append('rect')
-        .attr("fill", "blue")
+        .attr("fill", "rgb(127, 189, 224)")
         .attr('class', 'bar')
         .attr('transform', 'translate(670,30)')
         .attr('x', 100)
@@ -357,6 +371,12 @@ function d3BarChart(dataset, bars,topNumber, xScale, yScale) {
         .attr('height', function(d) {
             return yScale1.rangeBand();
         });
+    
+        var PointColors = ['rgb(127, 189, 224', 'blue']
+    bars.selectAll(".bar")
+        .on("click", function(){
+        PointColors = [PointColors[1], PointColors[0]]
+        d3.select(this).style("fill", PointColors[0]);});
 
 
 // bars.on("mouseover", function(d){
